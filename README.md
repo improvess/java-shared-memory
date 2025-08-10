@@ -1,31 +1,63 @@
 # java-shared-memory
-Read and Write shared memory segments with Java on Linux.
+Simple API to read and write on shared memory segments with Java on Linux.
 
-So far, it runs only on <3 Linux <3
+Note1: So far, it runs only on <3 Linux <3
+Note2: Yes, there are plans to add support to Windows and OSx
 
-Yes, there are plans to add support to Windows and OSx
+## Example: basic reading/write
 
-## Example
+It is easy to read or write on shared memory.
 
-It is easy to read or write on shared memory:
+For example, you can use the following code to write:
 
 ```java
 import java.nio.ByteBuffer;
 import com.improvess.shared.connector.Connector;
 
-Connector connector = new Connector();
+public class Example {
 
-int shm_id = connector.initialize_shared_buffer(0xd7a6, 8);
+    public static void main(String[] args) {
+        Connector connector = new Connector();
 
-ByteBuffer buffer = connector.get_shared_buffer(shm_id);
+        int shm_id = connector.initialize_shared_buffer(0xd7a6, 8);
 
-// Writing 8 bytes on shared segment
-for (int i = 0; i < 8; ++i) {
-    buffer.put(i, (byte) i);
+        ByteBuffer buffer = connector.get_shared_buffer(shm_id);
+
+        // Writing 8 bytes on shared segment
+        for (int i = 0; i < 8; ++i) {
+            buffer.put(i, (byte) i);
+        }
+    }
 }
 ```
 
-You can also use semaphores to avoid inter processing concurrence issues:
+and use another process to read the values.
+
+For example, you can use this C++ program to read the same values:
+
+```c++
+#include <sys/ipc.h>
+#include <sys/sem.h>
+#include <sys/shm.h>
+
+int main(int, char **)
+{
+    int shmid = shmget(0xd7a6, 8, 0666 | IPC_CREAT);
+    if (shmid == -1) {
+        std::cerr << "Failed to open shared memory segment: " << std::strerror(errno) << "\n";
+    }
+
+    char *buffer = (char *) shmat(shmid, 0, 0);
+    for (int b = 0; b < 8; ++b) {
+        std::cout << (int)buffer[b] << "\n";
+    }
+    return 0;
+}
+```
+
+## Example: inter process synchronization with semaphores
+
+With this API, you can also use semaphores to avoid inter processing concurrence issues:
 
 ```java
 import java.nio.ByteBuffer;
