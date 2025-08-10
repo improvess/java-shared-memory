@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.improvess</groupId>
+	<artifactId>shm</artifactId>
+	<version>1.0.0</version>
+  
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+	</properties>
+  
+	<dependencies></dependencies> 
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+      
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.14.0</version>
+				<configuration>
+					<compilerArgs>
+						<arg>-h</arg>
+						<arg>target</arg>
+						<arg>-d</arg>
+						<arg>target</arg>
+					</compilerArgs>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.5.1</version>
+				<groupId>org.codehaus.mojo</groupId>
+				<executions>
+					<execution>
+						<id>Generate-shared-lib</id>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>bash</executable>
+							<arguments>
+								<argument>jni/generate-lib.sh</argument>
+							</arguments>
+							<environmentVariables>
+								<JAVA_HOME>${env.JAVA_HOME}</JAVA_HOME>
+							</environmentVariables>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+	</build>
+</project>
