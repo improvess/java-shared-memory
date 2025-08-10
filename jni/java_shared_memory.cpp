@@ -1,3 +1,15 @@
+/**
+ * Author: Luiz Carlos d'Oleron
+ * doleron@gmail.com
+ * 
+ * DISCLAIMER: This software is provided “AS IS”, without warranty of any kind, express or implied, 
+ * including but not limited to the warranties of merchantability, fitness for a particular purpose, 
+ * and noninfringement. In no event shall the author or copyright holders be liable for any claim, 
+ * damages, or other liability, whether in an action of contract, 
+ * tort, or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software.
+ * 
+ */
+
 #include <jni.h>
 #include <stdio.h>
 #include <iostream>
@@ -63,12 +75,15 @@ JNIEXPORT jboolean JNICALL Java_com_improvess_shared_connector_Connector_release
 JNIEXPORT jint JNICALL Java_com_improvess_shared_connector_Connector_initialize_1shared_1semaphore(JNIEnv *, jobject, jint key, jint nsems, jint semflg)
 {
    int flag = semflg;
-   int new_flag = flag | IPC_EXCL; 
+   int new_flag = flag | IPC_EXCL;
    int result = semget(key, nsems, new_flag);
-   if (result > -1) {
-      // we only set val on creation 
+   if (result > -1)
+   {
+      // we only set val on creation
       semctl(result, 0, SETVAL, 1);
-   } else if (errno == EEXIST) {
+   }
+   else if (errno == EEXIST)
+   {
       result = semget(key, nsems, flag);
    }
    return result;
@@ -83,10 +98,10 @@ JNIEXPORT jboolean JNICALL Java_com_improvess_shared_connector_Connector_semapho
       sem_op.sem_num = 0;
       sem_op.sem_op = -1;
       sem_op.sem_flg = 0;
-      if (semop(sem_id, &sem_op, 1) == 0) {
+      if (semop(sem_id, &sem_op, 1) == 0)
+      {
          return JNI_TRUE;
       }
-
    }
    return JNI_FALSE;
 }
@@ -100,17 +115,18 @@ JNIEXPORT jboolean JNICALL Java_com_improvess_shared_connector_Connector_semapho
       sem_op.sem_num = 0;
       sem_op.sem_op = 1;
       sem_op.sem_flg = 0;
-      if (semop(sem_id, &sem_op, 1) == 0) {
+      if (semop(sem_id, &sem_op, 1) == 0)
+      {
          return JNI_TRUE;
       }
-
    }
    return JNI_FALSE;
 }
 
 JNIEXPORT jboolean JNICALL Java_com_improvess_shared_connector_Connector_release_1shared_1semaphore(JNIEnv *, jobject, jint sem_id)
 {
-   if (semctl(sem_id, 0, IPC_RMID) == -1) {
+   if (semctl(sem_id, 0, IPC_RMID) == -1)
+   {
       return JNI_TRUE;
    }
    return JNI_FALSE;

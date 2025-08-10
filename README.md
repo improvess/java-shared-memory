@@ -5,6 +5,52 @@ So far, it runs only on <3 Linux <3
 
 Yes, there are plans to add support to Windows and OSx
 
+## Example
+
+It is easy to read or write on shared memory:
+
+```java
+import java.nio.ByteBuffer;
+import com.improvess.shared.connector.Connector;
+
+Connector connector = new Connector();
+
+int shm_id = connector.initialize_shared_buffer(0xd7a6, 8);
+
+ByteBuffer buffer = connector.get_shared_buffer(shm_id);
+
+// Writing 8 bytes on shared segment
+for (int i = 0; i < 8; ++i) {
+    buffer.put(i, (byte) i);
+}
+```
+
+You can also use semaphores to avoid inter processing concurrence issues:
+
+```java
+import java.nio.ByteBuffer;
+import com.improvess.shared.connector.Connector;
+
+Connector connector = new Connector();
+
+int shm_id = connector.initialize_shared_buffer(0xd7a6, 8);
+
+ByteBuffer buffer = connector.get_shared_buffer(shm_id);
+
+// initializing and locking semaphore
+int sem_id = connector.initialize_shared_semaphore(sem_key, 1, Connector.IPC_CREAT | 0666);
+connector.semaphoro_lock(sem_id);
+
+// Writing 8 bytes on shared segment as in the previous example
+for (int i = 0; i < 8; ++i) {
+    buffer.put(i, (byte) i);
+}
+
+// unlocking and releasing semaphore
+connector.semaphoro_unlock(sem_id);
+connector.release_shared_semaphore(sem_id);
+```
+
 ## Building 
 
 First, set JAVA_HOME environment variable:
