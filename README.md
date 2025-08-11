@@ -33,7 +33,7 @@ public class Example {
 
 and use another process to read the values.
 
-For example, you can use this C++ program to read the same values:
+For example, you can use this C++ program to read the values you just wrote:
 
 ```c++
 #include <sys/ipc.h>
@@ -102,7 +102,12 @@ cd java-shared-memory
 mvn clean package
 ```
 
-Maven generates in the `target` folder both the jar and the shared library `libjava_shared_memory_lib.so`
+This library uses JNI. The native shared library `libjava_shared_memory_lib.so` is automatically shipped into generated jar.
+
+The maven build also copy the shared library into the `target` folder. Thus, there is two ways to load the shared library:
+
+- You can copy it somewhere and use `-Djava.library.path=your-folder` to load the libray or
+- You can use `com.improvess.shared.connector.LoadLib.load()` method to automatically load the library
 
 ## Running the Hello World example
 
@@ -176,3 +181,26 @@ decrementTask: Semaphore released
 - incrementTask: Semaphore released
 End
 ```
+
+### Automatically loading the shared library
+
+In the previous examples, we used `-Djava.library.path=target` to indicate which folder to look for the shared library.
+
+In the next example, we load the library through java code:
+
+```bash
+java -cp target com.improvess.shared.examples.LoadingLibrary
+```
+This example works by calling:
+
+```java
+static {
+    try {
+        LoadLib.load();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+```
+which automatically loads the shared library.
