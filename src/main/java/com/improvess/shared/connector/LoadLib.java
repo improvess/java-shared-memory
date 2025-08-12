@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Random;
 
 public class LoadLib {
 
@@ -34,7 +35,13 @@ public class LoadLib {
             throw new IllegalArgumentException(absoluteDiskPath + " is not a file");
         }
 
-        File dest = new File(tempDir, "libjava_shared_memory_lib.so");
+        Random random = new Random();
+
+        File destFolder = new File(tempDir, Integer.toString(random.nextInt(65356)));
+
+        destFolder.mkdir();
+
+        File dest = new File(destFolder, "/libjava_shared_memory_lib.so");
 
         try (
                 InputStream in = new BufferedInputStream(
