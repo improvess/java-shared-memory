@@ -2,6 +2,7 @@
 Simple API to read and write on shared memory segments with Java on Linux.
 
 Note1: So far, it runs only on <3 Linux <3
+
 Note2: Yes, there are plans to add support to Windows and OSx
 
 ## Example: basic reading/write
@@ -204,3 +205,18 @@ static {
 
 ```
 which automatically loads the shared library.
+
+### Throubleshooting
+
+If you get an error like:
+
+```
+jni/java_shared_memory.cpp:13:10: fatal error: jni.h: No such file or directory
+   13 | #include <jni.h>
+      |          ^~~~~~~
+compilation terminated.
+cp: cannot stat 'src/main/resources/libjava_shared_memory_lib.so': No such file or directory
+[ERROR] Command execution failed.
+org.apache.commons.exec.ExecuteException: Process exited with an error: 1 (Exit value: 1)
+```
+Make sure if `JAVA_HOME` points to a JDK installation, not only a JRE installation.
