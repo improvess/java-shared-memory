@@ -2,11 +2,13 @@ package com.improvess.shared.connector;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.Random;
@@ -23,18 +25,6 @@ public class LoadLib {
             throw new IllegalArgumentException(tmpDirsLocation + " is not a folder");
         }
 
-        URL url = LoadLib.class.getResource("/libjava_shared_memory_lib.so");
-        String absoluteDiskPath = url.getPath();
-
-        File source = new File(absoluteDiskPath);
-
-        if (!source.exists()) {
-            throw new IllegalArgumentException(absoluteDiskPath + " not found");
-        }
-        if (!source.isFile()) {
-            throw new IllegalArgumentException(absoluteDiskPath + " is not a file");
-        }
-
         Random random = new Random();
 
         File destFolder = new File(tempDir, Integer.toString(random.nextInt(65356)));
@@ -44,8 +34,7 @@ public class LoadLib {
         File dest = new File(destFolder, "/libjava_shared_memory_lib.so");
 
         try (
-                InputStream in = new BufferedInputStream(
-                        new FileInputStream(source));
+                InputStream in = LoadLib.class.getResourceAsStream("/libjava_shared_memory_lib.so");
                 OutputStream out = new BufferedOutputStream(
                         new FileOutputStream(dest))) {
 
