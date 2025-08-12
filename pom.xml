@@ -14,7 +14,6 @@
 	<dependencies></dependencies> 
 
 	<build>
-		<finalName>${project.artifactId}</finalName>
       
 		<plugins>
 			<plugin>
@@ -23,8 +22,6 @@
 				<configuration>
 					<compilerArgs>
 						<arg>-h</arg>
-						<arg>target</arg>
-						<arg>-d</arg>
 						<arg>target</arg>
 					</compilerArgs>
 					<source>${maven.compiler.source}</source>

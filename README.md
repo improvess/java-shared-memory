@@ -113,7 +113,7 @@ The maven build also copy the shared library into the `target` folder. Thus, the
 
 ```bash
 cd java-shared-memory
-java -Djava.library.path=target -cp target com.improvess.shared.examples.CheckConnector 2
+java -Djava.library.path=target -cp target /classescom.improvess.shared.examples.CheckConnector 2
 ```
 
 This command should print:
@@ -130,7 +130,7 @@ Connector say hello again!
 ### Using no locking
 
 ```bash
-java -Djava.library.path=target -cp target com.improvess.shared.examples.ConcurrentAccessWithLock
+java -Djava.library.path=target -cp target /classescom.improvess.shared.examples.ConcurrentAccessWithLock
 ```
 It outpus something like:
 ```bash
@@ -145,7 +145,7 @@ The values may vary due to the randomization of concurrent processing.
 ### Using locking
 
 ```bash
-java -Djava.library.path=target -cp target com.improvess.shared.examples.ConcurrentAccessWithLock
+java -Djava.library.path=target -cp target /classescom.improvess.shared.examples.ConcurrentAccessWithLock
 ```
 It should outputs:
 
@@ -189,7 +189,7 @@ In the previous examples, we used `-Djava.library.path=target` to indicate which
 In the next example, we load the library through java code:
 
 ```bash
-java -cp target com.improvess.shared.examples.LoadingLibrary
+java -cp target /classescom.improvess.shared.examples.LoadingLibrary
 ```
 This example works by calling:
 
